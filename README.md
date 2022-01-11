@@ -1,2 +1,2 @@
-# CNES
-A light weight simple NES emulator written in C
+# CGB
+A light weight simple Gameboy emulator written in C
