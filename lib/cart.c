@@ -172,7 +172,7 @@ bool cart_load(char *cart) {
 u8 cart_read(u16 address){
     //ROM ONLY type supported (for now)
 
-    return ctx.rom_data[address];
+    return ctx.rom_data[address];   //return the data from the rom at the specified address
 }
 
 void cart_write(u16 address, u8 value){

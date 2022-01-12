@@ -9,12 +9,12 @@ void cpu_init() {
 }
 
 static void fetch_instruction(){
-    ctx.cur_opcode = bus_read(ctx.regs.pc++);
-    ctx.cur_inst = instruction_by_opcode(ctx.cur_opcode);
+    ctx.cur_opcode = bus_read(ctx.regs.pc++);               //set the current opcode to the current instruction from the rom
+    ctx.cur_inst = instruction_by_opcode(ctx.cur_opcode);   //set the current instruction to the address on instructions[ctx.cur_opcode]
 
-    if(ctx.cur_inst == NULL){
-            printf("Unknown Instruction! |%X|\n", ctx.cur_opcode);
-            exit(-7);
+    if(ctx.cur_inst == NULL){                               //check if the current instruction is known    
+        printf("Unknown Instruction! |%X|\n", ctx.cur_opcode);
+        exit(-7);
     }
 }
 
@@ -26,13 +26,13 @@ static void fetch_data(){
         case AM_IMP: return;
 
         case AM_R:
-            ctx.fetched_data = cpu_read_reg(ctx.cur_inst->reg_1);
+            ctx.fetched_data = cpu_read_reg(ctx.cur_inst->reg_1);   //Set fetched_data to a register
             return;
         
         case AM_R_D8:
-            ctx.fetched_data = bus_read(ctx.regs.pc);
-            emu_cycles(1);
-            ctx.regs.pc++;
+            ctx.fetched_data = bus_read(ctx.regs.pc);               //Set fetched_data to the address 'ctx.regs.pc' of the rom
+            emu_cycles(1);                                             
+            ctx.regs.pc++;                                          //Increment program counter by 1 since it took 1 cycle
             return;
 
         case AM_D16: {
@@ -44,7 +44,7 @@ static void fetch_data(){
 
             ctx.fetched_data = lo | (hi << 8);
 
-            ctx.regs.pc += 2;
+            ctx.regs.pc += 2;                                       //Increment program counter by 2 since it took 2 cycles
 
             return;
         }
@@ -62,7 +62,7 @@ static void execute(){
 bool cpu_step() {
     
     if(!ctx.halted){
-        u16 pc = ctx.regs.pc;
+        u16 pc = ctx.regs.pc;   //Get program counter and set pc to the program counter
 
         fetch_instruction();
         fetch_data();
