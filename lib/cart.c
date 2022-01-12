@@ -128,9 +128,9 @@ const char *cart_type_name() {
 }
 
 bool cart_load(char *cart) {
-    snprintf(ctx.filename, sizeof(ctx.filename), "%s", cart);
+    snprintf(ctx.filename, sizeof(ctx.filename), "%s", cart);                   //Get rom filename
 
-    FILE *fp = fopen(cart, "r");
+    FILE *fp = fopen(cart, "r");                                                //Load cartridge
 
     if (!fp) {
         printf("Failed to open: %s\n", cart);
@@ -139,16 +139,16 @@ bool cart_load(char *cart) {
 
     printf("Opened: %s\n", ctx.filename);
 
-    fseek(fp, 0, SEEK_END);
+    fseek(fp, 0, SEEK_END);                                                     //Get size of rom
     ctx.rom_size = ftell(fp);
 
-    rewind(fp);
+    rewind(fp);                                                                 //Go back to begining of rom file
 
-    ctx.rom_data = malloc(ctx.rom_size);
+    ctx.rom_data = malloc(ctx.rom_size);                                        //allocate memory for the rom
     fread(ctx.rom_data, ctx.rom_size, 1, fp);
-    fclose(fp);
+    fclose(fp);                                                                 //Close rom file (because its in RAM)
 
-    ctx.header = (rom_header *)(ctx.rom_data + 0x100);
+    ctx.header = (rom_header *)(ctx.rom_data + 0x100);                          //Go to entry point of rom
     ctx.header->title[15] = 0;
 
     printf("Cartridge Loaded:\n");
@@ -167,4 +167,15 @@ bool cart_load(char *cart) {
     printf("\t Checksum : %2.2X (%s)\n", ctx.header->checksum, (x & 0xFF) ? "PASSED" : "FAILED");
 
     return true;
+}
+
+u8 cart_read(u16 address){
+    //ROM ONLY type supported (for now)
+
+    return ctx.rom_data[address];
+}
+
+void cart_write(u16 address, u8 value){
+
+    NO_IMPL
 }
