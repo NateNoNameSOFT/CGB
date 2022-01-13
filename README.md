@@ -1,2 +1,3 @@
-# CGB
-A light weight simple Gameboy emulator written in C
+# CGB'22
+A light weight simple Gameboy emulator written in C more features coming soon...
+please reccomend any ideas in Issues with the "enhancement" label
