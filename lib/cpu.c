@@ -32,10 +32,11 @@ bool cpu_step() {
         fetch_instruction();
         fetch_data();
 
-        printf("%04X: %7s (%02X %02X %02X) A: %02X B: %02X C: %02X\n", 
+        printf("%04X: %7s (%02X %02X %02X) A: %02X B: %02X C: %02X\tBC: %X%X DE: %X%X HL: %X%X\n", 
             pc, inst_name(ctx.cur_inst->type), 
-            bus_read(pc+1), bus_read(pc+2), bus_read(pc+3),
-            ctx.regs.a, ctx.regs.b, ctx.regs.c);
+            ctx.cur_opcode, bus_read(pc+1), bus_read(pc+2),
+            ctx.regs.a, ctx.regs.b, ctx.regs.c,
+            ctx.regs.b, ctx.regs.c, ctx.regs.d, ctx.regs.e, ctx.regs.h, ctx.regs.l);
 
         if(ctx.cur_inst == NULL){                               //check if the current instruction is known    
             printf("Unknown instruction! | %X |\n", ctx.cur_opcode);
@@ -46,4 +47,12 @@ bool cpu_step() {
     }
 
     return true;
+}
+
+u8 cpu_get_ie_register(){
+    return ctx.ie_register;
+}
+
+u8 cpu_set_ie_register(u8 n){
+    ctx.ie_register = n;
 }
